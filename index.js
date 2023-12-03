@@ -9,9 +9,10 @@ const ejs = require('ejs')
 const app = express();
 const port = process.env.PORT || 80;
 // SETTING APP PULIC AND VIEWS
+app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
+app.use(bodyParser.json({ limit: '50mb' }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine','ejs')
