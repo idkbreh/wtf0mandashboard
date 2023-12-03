@@ -7,7 +7,7 @@ const fsPromises = require('fs').promises;
 const fs = require('fs');
 const ejs = require('ejs')
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 80;
 // SETTING APP PULIC AND VIEWS
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
