@@ -1,0 +1,29 @@
+<html lang="en">
+<head>
+    <title>screen capture</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        function loadSource() {
+            $.ajax({
+                url: "<%= server %>.html",
+                cache: false,
+                success: function(html) {
+                    $("#pagehtml").html(html);
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error loading content:", error);
+                    console.log("XHR object:", xhr);
+                }
+            });
+        }
+        setInterval(loadSource, 4000);
+    </script>
+
+    <!-- Dynamically link the stylesheet based on req.session.serverID -->
+    <link rel="stylesheet" href="<%= server %>.css">
+    <script src="<%= server %>.js"></script>
+</head>
+<body>
+    <div id="pagehtml"></div>
+</body>
+</html>

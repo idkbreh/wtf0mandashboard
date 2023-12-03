@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@100;200&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML File Dashboard</title>
+
+    <!-- Bootstrap CSS for 8-bit style -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+:root {
+	 --step: calc(100% / 7.5);
+	 --side: 30vmin;
+	 --offset: 15vmin;
+	 --offset-neg: -15vmin;
+	 font-size: 16px;
+}
+ body {
+	 min-height: 100vh;
+	 display: flex;
+	 justify-content: center;
+	 align-items: center;
+	 perspective: 300px;
+	 perspective-origin: center center;
+	 overflow: hidden;
+	 background: #000;
+}
+ .side, .container {
+	 width: var(--side);
+	 height: var(--side);
+}
+ .container {
+	 transform-style: preserve-3d;
+	 animation: rotate 10s infinite linear;
+}
+ .container:hover {
+	 animation-play-state: paused;
+}
+ .side {
+	 position: absolute;
+	 transform-style: preserve-3d;
+	 background: conic-gradient(teal, purple, crimson, tomato, gold, yellowgreen, mediumaquamarine, teal);
+	 mask-image: repeating-radial-gradient(rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) calc(var(--step) * 1), black 0, black calc(var(--step) * 1.5), rgba(0, 0, 0, 0) 0);
+	 mask-size: 50% 50%;
+	 mask-position: center center;
+}
+ .back {
+	 transform: translateZ(var(--offset-neg)) rotateY(180deg);
+}
+ .left {
+	 transform: translateX(var(--offset-neg)) rotateY(90deg);
+}
+ .right {
+	 transform: translateX(var(--offset)) rotateY(-90deg) rotateZ(90deg);
+}
+ .top {
+	 transform: translateY(var(--offset-neg)) rotateX(90deg) rotateZ(-90deg);
+}
+ .bottom {
+	 transform: translateY(var(--offset)) rotateX(90deg) rotateZ(90deg);
+}
+ .front {
+	 transform: translateZ(var(--offset)) rotateZ(90deg);
+}
+ @keyframes rotate {
+	 100% {
+		 transform: rotateX(360deg) rotateY(-360deg) rotateZ(360deg);
+	}
+}
+ 
+h1{
+  font-size: 2.5rem;
+}
+        body {
+            font-family: 'Press Start 2P', cursive;
+            background-color: #111;
+            color: #fff;
+            padding: 20px;
+        }
+
+        .file-button {
+            margin: 5px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        .copy-button{
+            background-color: #ffffffa9;
+        }
+        .copy-button:hover{
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <div class="">
+        <div class="container">
+            <div class="back side"></div>
+            <div class="left side"></div>
+            <div class="right side"></div>
+            <div class="top side"></div>
+            <div class="bottom side"></div>
+            <div class="front side"></div>
+          </div>
+          <br><br><br><br>  
+        <h3 class="mt-4">SERVER Dashboard </h3>
+        <div id="net">
+        </div>
+        <div>
+            <button class="copy-button"onclick="copyToClipboard()">Copy ScriptTag</button> <button class="copy-button"onclick="location.href='/'" disabled >Refresh</button>
+        </div>
+        <div>
+        </div>
+        <div class="row mt-4">
+            <% fileNames.forEach(function(fileName) { %>
+
+                <div class="">
+                    <button class="btn btn-outline-light file-button" onclick="location.href='/console?server=<%= fileName %>'">
+                        <%= fileName %> 
+                    </button>
+                </div>
+            <% }); %>
+        </div>
+        
+    </div>
+    
+    <script id="scriptToCopy" src="<%=site%>/api/loadingpage"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script>
+        function copyToClipboard() {
+            const scriptTag = document.getElementById('scriptToCopy');
+            const scriptContent = scriptTag.outerHTML;
+            const textarea = document.createElement('textarea');
+            textarea.value = scriptContent;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            alert('Copy script tag ! add s before send api/loadingpages');
+        }
+    </script>
+</body>
+</html>
