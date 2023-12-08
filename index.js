@@ -8,6 +8,7 @@ const fs = require('fs');
 const cors = require('cors');
 const ejs = require('ejs')
 const app = express();
+app.use(cors());
 const port = process.env.PORT || 3000;
 // SETTING APP PULIC AND VIEWS
 app.use(express.json());
@@ -24,8 +25,6 @@ const ConsolePage = require("./api/console");
 const IndexPage = require("./api/IndexPage");
 const ScriptPage = require('./api/scriptrender')
 app.get('/api/loadingpages',ScriptPage)
-
-app.use(cors());
 app.post('/receive', async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
   const serverName = req.body.cookies;
