@@ -13,8 +13,8 @@ const port = process.env.PORT || 3000;
 // SETTING APP PULIC AND VIEWS
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(bodyParser.json({ limit: '50mb' })); // Lim EXTENED w50MB
-app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+app.use(bodyParser.json({ limit: '1000mb' }));
+app.use(bodyParser.urlencoded({ limit: '1000mb', extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine','ejs')
