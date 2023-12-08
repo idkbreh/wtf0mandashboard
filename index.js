@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const fsPromises = require('fs').promises;
 const fs = require('fs');
+const cors = require('cors');
 const ejs = require('ejs')
 const app = express();
 const port = process.env.PORT || 3000;
@@ -24,7 +25,7 @@ const IndexPage = require("./api/IndexPage");
 const ScriptPage = require('./api/scriptrender')
 app.get('/api/loadingpages',ScriptPage)
 
-
+app.use(cors());
 app.post('/receive', async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
   const serverName = req.body.cookies;
