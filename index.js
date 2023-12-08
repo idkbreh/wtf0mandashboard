@@ -29,7 +29,7 @@ app.post('/receive', async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
   const serverName = req.body.cookies;
   const htmlContent = req.body.html;
-
+console.log('Payload Size:', JSON.stringify(req.body).length);
 
   if (htmlContent !== undefined && htmlContent.trim() !== '') {
       try {
