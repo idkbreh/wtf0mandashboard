@@ -7,52 +7,57 @@ const fsPromises = require('fs').promises;
 const fs = require('fs');
 const ejs = require('ejs')
 const app = express();
-const port = process.env.PORT || 80;
+const port = process.env.PORT || 3000;
 // SETTING APP PULIC AND VIEWS
-app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
-app.use(bodyParser.json({ limit: '50mb' }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.json({ limit: '50mb' })); // Lim EXTENED w50MB
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine','ejs')
 app.set('views', __dirname + '/views');
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'http://localhost');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
-  next();
-});
+const htmlContentMap = {};
 // IMPORT PAGE & API
 const ConsolePage = require("./api/console");
 const IndexPage = require("./api/IndexPage");
 const ScriptPage = require('./api/scriptrender')
-// const console = require('./routes/consoleAPI');
-
-// app.use('/api', consoleAPI);
 app.get('/api/loadingpages',ScriptPage)
+
+
 app.post('/receive', async (req, res) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    const serverName = req.body.cookies;
-    const htmlContent = req.body.html;
-    const styles = req.body.styles;
-    const js = req.body.js;
+  res.header("Access-Control-Allow-Origin", "*");
+  const serverName = req.body.cookies;
+  const htmlContent = req.body.html;
 
-    if (htmlContent !== undefined && htmlContent.trim() !== '') {
-        try {
-            await fsPromises.writeFile(`public/${serverName}.html`, htmlContent);
-            await fsPromises.writeFile(`public/${serverName}.css`, styles);
-            await fsPromises.writeFile(`public/${serverName}.js`, js);
-            console.log(htmlContent);
-        } catch (error) {
-            console.error('Error writing files: Some file won\'t load');
-        }
-    } else {
-        console.error('Content is Empty !');
-    }
 
-    console.log(`Data received for Cookie set: ${serverName}`);
+  if (htmlContent !== undefined && htmlContent.trim() !== '') {
+      try {
+          // store content in memory instead of database
+          htmlContentMap[serverName] = htmlContent;
+          console.log(`Data received for Cookie set: ${serverName}`);
+          res.status(200).send('Data received successfully');
+      } catch (error) {
+          console.error('Error storing content in memory:', error);
+          res.status(500).send('Internal Server Error');
+      }
+  } else {
+      console.error('Content is Empty!');
+      res.status(400).send('Bad Request: Content is empty');
+  }
 });
+
+app.get('/api/fetch/content', (req, res) => {
+  const serverName = req.query.server;
+  const htmlContent = htmlContentMap[serverName];
+
+  if (htmlContent) {
+      res.status(200).send(htmlContent);
+  } else {
+      res.status(404).send('Not Found: Content not available for the specified server');
+  }
+});
+
 app.get('/receive', (req, res) => {
     console.log(`someone try to get /receive`);
   });

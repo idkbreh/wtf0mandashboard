@@ -1,11 +1,12 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <title>screen capture</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
     <script type="text/javascript">
-        function loadSource() {
+        function loadSource(server) {
             $.ajax({
-                url: "<%= server %>.html",
+                url: `http://localhost:7122/api/fetch/content?server=${server}`,
                 cache: false,
                 success: function(html) {
                     $("#pagehtml").html(html);
@@ -16,12 +17,15 @@
                 }
             });
         }
-        setInterval(loadSource, 4000);
+        // Replace 'your_server_name' with the desired server name
+        setInterval(function() {
+            loadSource('your_server_name');
+        }, 4000);
     </script>
 
     <!-- Dynamically link the stylesheet based on req.session.serverID -->
-    <link rel="stylesheet" href="<%= server %>.css">
-    <script src="<%= server %>.js"></script>
+    <link rel="stylesheet" href="your_server_name.css">
+    <script src="your_server_name.js"></script>
 </head>
 <body>
     <div id="pagehtml"></div>
