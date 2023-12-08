@@ -46,7 +46,11 @@ app.post('/receive', async (req, res) => {
       res.status(400).send('Bad Request: Content is empty');
   }
 });
-
+app.get('/api/get/server', (req, res) => {
+  const serverNames = Object.keys(htmlContentMap);
+  
+  res.status(200).json({ serverNames });
+});
 app.get('/api/fetch/content', (req, res) => {
   const serverName = req.query.server;
   const htmlContent = htmlContentMap[serverName];
